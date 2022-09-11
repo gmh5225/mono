@@ -4,4 +4,3 @@ add_executable(my_app
 [[pub(link_libraries)]]
   my_lib
 )
-

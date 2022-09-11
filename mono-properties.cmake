@@ -1,5 +1,5 @@
-# [[( and )]] are interpreted as whitespace outside of a string literal, so
-# [[pub(link_libraries)]] becomes publink_libraries when we pass it to
+# [[ and ]] are interpreted as whitespace outside of a string literal, so
+# [[pub(link_libraries)]] becomes pub(link_libraries) when we pass it to
 # add_library and add_executable. Therefore, we need to use the same
 # interpretation in cmake_parse_arguments.
 

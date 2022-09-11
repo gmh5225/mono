@@ -1,11 +1,10 @@
-module;
-#include <iostream> // std::cout
-export module lib;
+export module my_lib;
+import <iostream>; // std::cout
 
-export namespace lib
+namespace my_lib
 {
-  void hello()
+  export auto hello()
   {
-    std::cout << "Hello, world! \n";
+    return "Hello, world!";
   }
 }
