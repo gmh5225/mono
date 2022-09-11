@@ -32,20 +32,26 @@ add_executable(my_app
 
 ## Get started right away! 🚀
 
-Clone the repository into your project's cmake directory.
-
-```bash
-git clone https://www.github.com/wroyca/mono.git cmake
-```
-
 Add the following to your CMakeLists.txt
 
 ```cmake
 cmake_minimum_required(VERSION 3.24)
 project(MyProject VERSION 1.0.0)
 
-# Add Mono
-add_subdirectory(cmake/mono)
+# Enables populating content at configure time
+include(FetchContent)
+
+# Populate Mono
+FetchContent_Declare(mono
+  GIT_REPOSITORY https://github.com/wroyca/mono.git
+  GIT_TAG        main
+)
+
+# Ensures Mono have been populated
+FetchContent_MakeAvailable(mono)
+
+# Add Mono to your project
+include(${mono_SOURCE_DIR}/mono.cmake)
 
 # Add your library target
 add_library(my_lib)
