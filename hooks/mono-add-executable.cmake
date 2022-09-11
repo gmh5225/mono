@@ -41,6 +41,13 @@ function(add_executable name)
     )
   endif()
 
+  target_compile_features(${name}
+    PRIVATE
+      "${parsed_compile_features}"
+    PUBLIC
+      "${parsed_pub\(compile_features\)}"
+  )
+
   target_link_libraries(${name}
     PRIVATE
       "${parsed_link_libraries}"
