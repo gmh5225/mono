@@ -2,7 +2,7 @@ function(add_executable name)
   cmake_parse_arguments(parsed
     ""
     ""
-    "[dependencies]"
+    "${mono_properties}"
     ${ARGN}
   )
 
@@ -22,19 +22,51 @@ function(add_executable name)
     endif()
   endif()
 
-  file(GLOB_RECURSE modules CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.ixx *.cpp *.hpp *.h *.c) 
+  file(GLOB_RECURSE modules CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp; *.hpp; *.ixx)
   _add_executable(${name} ${modules} ${parsed_UNPARSED_ARGUMENTS})
 
-  target_compile_options(${name}
+  if ("${parsed_compile_options}" STREQUAL "" AND "${parsed_pubcompile_options}" STREQUAL "")
+    target_compile_options(${name}
+      PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+        $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Werror -pedantic>
+        $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Werror -pedantic>
+    )
+  else()
+    target_compile_options(${name}
+      PRIVATE
+        "${parsed_compile_options}"
+      PUBLIC
+        "${parsed_pub\(compile_options\)}"
+    )
+  endif()
+
+  target_link_libraries(${name}
     PRIVATE
-      $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-      $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Werror -pedantic>
-      $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Werror -pedantic>
+      "${parsed_link_libraries}"
+    PUBLIC
+      "${parsed_pub\(link_libraries\)}"
   )
 
   target_link_libraries(${name}
     PRIVATE
-      "${parsed_\[dependencies\]}"
+      "${parsed_link_libraries}"
+    PUBLIC
+      "${parsed_pub\(link_libraries\)}"
+  )
+
+  target_link_options(${name}
+    PRIVATE
+      "${parsed_link_options}"
+    PUBLIC
+      "${parsed_pub\(link_options\)}"
+  )
+
+  target_include_directories(${name}
+    PRIVATE
+      "${parsed_include_directories}"
+    PUBLIC
+      "${parsed_pub\(include_directories\)}"
   )
 
   install(TARGETS ${name}

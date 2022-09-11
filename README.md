@@ -1,58 +1,78 @@
 # Mono
 
-Simple, consistent, and powerful interface for CMake's built-in add_library() and add_executable() functions.
+Simple, consistent, and powerful interface for CMake's built-in add_library() and add_executable() commands.
 
-**This is a work in progress, it's not ready for use yet.**
+**Mono is early in development. You can use it, but it's not ready for production. Please report any bugs you find.**
 
 ## Features
 
-* **Simple** - Mono is designed to be simple to use, leaving you to focus on your project.
+* **Simple** - Mono is designed with simplicity in mind. Get started on a new project in seconds.
 
-* **Backwards compatible** - Mono won't break your existing code. You can transition to Mono at your own pace.
+* **Consistent** - Mono provides a consistent interface for both libraries and executables. No more complicated boilerplate build scripts. Just declare your targets and Mono will take care of the rest.
 
-* **Powerful** - Mono provides a powerful interface with a minimal amount of boilerplate. Source files, dependencies, and compile options are all specified in a single function call. See the [documentation](docs/spec.md) for more details.
-
-<!-- TODO:
-
-* **Flexible** - Mono is designed to be flexible and extensible. It is easy to add new features and customize the behavior of existing features.
-
--->
+* **Powerful** - Mono provides a powerful interface for CMake's built-in add_library() and add_executable() commands. It's easy to add custom build steps, link against external libraries, and more.
 
 And so much more!
 
+##### [Try me!](example/)
 ```cmake
-add_library(mylib
-[[standard]]
-  cxx_std_17
-[[link_options]]
-  -Wl,--no-undefined
-[[interface]]
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+add_library(my_lib
+[[pub(include_directories)]]
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-```
 
-## Usage
-
-Simply include the module in your CMakeLists.txt file. The module will automatically hook into the `add_library()` and `add_executable()` functions allowing you to use mono properties.
-
-```cmake
-cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
-project(MyProject LANGUAGES CXX VERSION 1.0.0)
-
-# Including mono in our project
-include(cmake/mono.cmake)
-
-# Simple library to be used by other targets
-add_library(mylib)
-
-# Simple executable that uses the library we just created
-add_executable(myexe
-[[dependencies]]
-  mylib
+add_executable(my_app
+[[link_libraries]]
+  Qt6::Widgets
+[[pub(link_libraries)]]
+  my_lib
 )
 ```
 
+## Get started right away! 🚀
+
+Clone the repository into your project's cmake directory.
+
+```bash
+git clone https://www.github.com/wroyca/mono.git cmake
+```
+
+Add the following to your CMakeLists.txt
+
+```cmake
+cmake_minimum_required(VERSION 3.24)
+project(MyProject VERSION 1.0.0)
+
+# Add Mono
+add_subdirectory(cmake/mono)
+
+# Add your library target
+add_library(my_lib)
+
+# Add your executable target
+add_executable(my_app
+[[link_libraries]]
+  my_lib
+)
+```
+**And that's it! You're ready to go! 🎉 🎉 🎉**
+
+
+```bash
+cmake -B build -S .
+cmake --build build
+```
+
+##  Documentation
+
+*TODO*
+
+<!-- TODO:
+* [Quickstart](docs/quickstart.md)
+* [Reference](docs/reference.md)
+* [FAQ](docs/faq.md)
+-->
 <!-- TODO:
 
 ### Advanced Usage
@@ -72,10 +92,6 @@ endfunction()
 ## License
 
 Mono is licensed under the MIT License. See [LICENSE](LICENSE) for more information.
-
-## Credits
-
-Mono was created by [William Roy](https://www.github.com/wroyca).
 
 ## Acknowledgements
 
