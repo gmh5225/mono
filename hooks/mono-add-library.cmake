@@ -41,11 +41,11 @@ function(add_library name)
     )
   endif()
 
-  target_compile_features(${name}
+  target_compile_options(${name}
     PRIVATE
-      "${parsed_compile_features}"
+      "${parsed_compile_options}"
     PUBLIC
-      "${parsed_pub\(compile_features\)}"
+      "${parsed_pub\(compile_options\)}"
   )
 
   target_link_libraries(${name}

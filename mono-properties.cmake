@@ -9,7 +9,6 @@ set(mono_properties
   "compile_options"
   "compile_definitions"
   "include_directories"
-  "compile_features"
 
   # The following are public equivalents of the above.
   "pub(link_options)"
@@ -17,5 +16,4 @@ set(mono_properties
   "pub(compile_options)"
   "pub(compile_definitions)"
   "pub(include_directories)"
-  "pub(compile_features)"
 )
